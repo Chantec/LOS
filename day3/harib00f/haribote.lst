@@ -1,0 +1,5 @@
+     1                                                  org c200h
+      >> [ERROR #012] expression error.
+     2 00000000                                 fin:
+     3 00000000 F4                                      hlt
+     4 00000001 EB FD                                   jmp fin      >> [ERROR #012] expression error.
