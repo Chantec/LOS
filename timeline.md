@@ -63,3 +63,8 @@ DL 驱动器 这里用的是0h表示A 也就只有一个驱动器
 
 
 
+### Day4
+
+![image-20220118114856210](C:\Users\梁子超\AppData\Roaming\Typora\typora-user-images\image-20220118114856210.png)
+
+如过init的时候不除4
