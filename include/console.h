@@ -38,8 +38,8 @@ void console_puts(char *str);
 void console_puts_color(char *str,real_color_t back,real_color_t fore);
 
 //print number
-// void console_put_hex(uint32_t n,real_color_t back,real_color_t fore);
-// void console_put_dec(uint32_t n,real_color_t back,real_color_t fore);
+void console_put_hex(uint32_t n,real_color_t back,real_color_t fore);
+void console_put_dec(uint32_t n,real_color_t back,real_color_t fore);
 
 //scroll screem
 void scroll();

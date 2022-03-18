@@ -120,3 +120,52 @@ void scroll()
         cursor_y=24;
     }
 }
+
+void console_put_hex(uint32_t n,real_color_t back,real_color_t fore)
+{
+    //radix 16
+    //check the four bit 
+    console_puts_color("0x",back,fore);
+
+    //31 30 29 28 27   ...... 0
+    //          *
+    for(int i =28;i>=0;i-=4)
+    {
+        int t=(n>>i)&(0x0F);
+        if(t<10)
+        {
+            console_putc_color(t+'0',back,fore);
+        }
+        else 
+        {
+            char ch="A";
+            console_putc_color('A'+t-10,back,fore);
+        }
+    }
+}
+void console_put_dec(uint32_t n,real_color_t back,real_color_t fore)
+{
+    //just like the code we learn in assemble 
+    char ans[32]={0};
+    int i=0;
+    do 
+    {
+        ans[i]=n%10+'0';
+        n/=10;
+        i++;
+    }while(n>0);
+
+    //reverse the ans to use the done function put_str
+    i--;
+    char ans2[32]={0};
+    int j;
+    for(j=0;i>=0;++j)
+    {
+        ans2[j]=ans[i--];
+    }
+    ans2[j]='\0';
+
+
+    console_puts_color(ans2,back,fore);
+
+}

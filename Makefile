@@ -58,6 +58,7 @@ umount_image:
 
 .PHONY:qemu
 qemu:
+	make
 	qemu -fda floppy.img -boot a
 
 .PHONY:bochs
