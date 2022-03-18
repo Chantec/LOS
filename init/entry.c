@@ -11,7 +11,7 @@ void puts(char *str)
 int kern_entry()
 {
     console_clear();
-    puts("hello this my OS! Here we run the test:");
+    puts("hello this is my OS! Here we run the print test:");
     console_put_dec(100,rc_black,rc_green);
     puts("");
     console_put_dec(0,rc_black,rc_green);
