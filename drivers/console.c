@@ -138,7 +138,6 @@ void console_put_hex(uint32_t n,real_color_t back,real_color_t fore)
         }
         else 
         {
-            char ch="A";
             console_putc_color('A'+t-10,back,fore);
         }
     }

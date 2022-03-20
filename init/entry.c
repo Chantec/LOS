@@ -1,5 +1,6 @@
 #include "types.h"
 #include "console.h"
+#include "printk.h"
 
 
 //test
@@ -11,14 +12,12 @@ void puts(char *str)
 int kern_entry()
 {
     console_clear();
-    puts("hello this is my OS! Here we run the print test:");
-    console_put_dec(100,rc_black,rc_green);
-    puts("");
-    console_put_dec(0,rc_black,rc_green);
-    puts("");
-    console_put_dec(1234,rc_black,rc_green);
-    puts("");
-    console_put_hex(21,rc_black,rc_green);
+    puts("hello this is my OS! Here we run the printk test:");
+
+
+    
+    printk("%d\n%c\n%s\n%x\n",1,'L',"hello world!",12);
+    printk_color(rc_black,rc_green,"%d\n%c\n%s\n%x\n",1,'L',"hello world!",12);
 
     return 0;
 }
