@@ -61,10 +61,6 @@ qemu:
 	make
 	qemu -fda floppy.img -boot a
 
-.PHONY:bochs
-bochs:
-	bochs -f scripts/bochsrc.txt
-
 .PHONY:debug
 debug:
 	qemu -S -s -fda floppy.img -boot a &

@@ -1,6 +1,7 @@
 #include "types.h"
 #include "console.h"
 #include "printk.h"
+#include "gdt.h"
 
 
 //test
@@ -11,13 +12,13 @@ void puts(char *str)
 }
 int kern_entry()
 {
-    console_clear();
-    puts("hello this is my OS! Here we run the printk test:");
-
-
+    init_gdt();
     
-    printk("%d\n%c\n%s\n%x\n",1,'L',"hello world!",12);
-    printk_color(rc_black,rc_green,"%d\n%c\n%s\n%x\n",1,'L',"hello world!",12);
+    console_clear();
+    puts("hello this is my OS!");   
+    // printk("%d\n%c\n%s\n%x\n",1,'L',"hello world!",12);
+    // printk_color(rc_black,rc_green,"%d\n%c\n%s\n%x\n",1,'L',"hello world!",12);
+    
 
     return 0;
 }

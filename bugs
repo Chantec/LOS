@@ -1,0 +1,3 @@
+common.h
+inline void outb(uint16_t port,uint8_t value);
+声明的时候直接写的inline 编译不了 显示找不到outb

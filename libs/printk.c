@@ -2,8 +2,8 @@
 //只支持我经常使用的 %d %c %s %x
 //不支持宽度精度等等 只提供了最最基本的支持
 //等有时间再来补坑
-#include "console.h"
-#include "vargs.h"
+#include "printk.h"
+#include "string.h"
 
 static void vsprintf(char *buff, const char *format, va_list args);
 
