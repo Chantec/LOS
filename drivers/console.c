@@ -16,8 +16,9 @@ void move_cursor()
     //14 15 cursor_location hign low
     outb(0x3D4,14);
     outb(0x3D5,cursor_location>>8);
-    outb(0x34,15);
+    outb(0x3D4,15);//bug 写的34 tmd
     outb(0x3D5,cursor_location);
+
 }
 
 void console_clear()
@@ -25,7 +26,7 @@ void console_clear()
     //generate black space
     //black  white 
     //space 0x20
-    uint8_t attribute_byte=(0<<4)|(15&0x0f);
+    uint8_t attribute_byte=(0<<4)|(15&0x0F);
     uint16_t blank=(attribute_byte<<8)|0x20;
     int i;
     for(i =0;i<80*25;i++)
