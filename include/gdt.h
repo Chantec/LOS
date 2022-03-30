@@ -1,9 +1,7 @@
 #ifndef INCLUDE_GDT_H_
 #define INCLUDE_GDT_H_
 
-
 #include "types.h"
-
 
 //GDT global desciptor table
 typedef
@@ -31,6 +29,5 @@ void init_gdt();
 
 //初始化gdtr asm实现
 extern void gdt_flush(uint32_t);
-
 
 #endif 

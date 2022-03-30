@@ -5,8 +5,6 @@ gdt_ptr_t   gdt_ptr;//指向gdt首地址
 
 //构造gdt
 static void gdt_set_gate(int32_t num,uint32_t base,uint32_t limit,uint8_t access,uint8_t gran);
-//初始化gdtr asm实现
-extern void gdt_flush(uint32_t);
 
 //初始化gdt
 void init_gdt()

@@ -6,16 +6,19 @@ void memcpy(uint8_t *dest,const uint8_t *src,uint32_t len)
     for(int i=0;i<len;++i)
         dest[i]=src[i];
 }
-
-void memset(void *dest,uint8_t val,uint32_t len)
+//liangtodo 这里之前是void *
+void memset(uint8_t *dest,uint8_t val,uint32_t len)
 {
     //这里为什么不直接写成 uint8_t * dest liangtodo
-    uint8_t *dst=(uint8_t*) dest;
-    for(int i=0;i<len;++i)
-        dst[i]=val;
-}
+    // uint8_t *dst=(uint8_t*) dest;
+    // for(int i=0;i<len;++i)
+    //     dst[i]=val;
 
-void bzero(void *dest,uint32_t len)
+    uint8_t *temp=(uint8_t*) dest;
+    for(;len!=0;len--) *temp++=val;
+}
+//liangtodo 这也改了
+void bzero(uint8_t *dest,uint32_t len)
 {
     memset(dest,0,len);
 }
