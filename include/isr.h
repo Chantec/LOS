@@ -12,4 +12,11 @@ struct registers
     uint32_t eip,cs,eflags,useresp,ss;//这个应该是cli的时候自动
 }registers_t;
 
+typedef void (*isr_t)(registers_t);//函数指针
+
+#define IRQ0 32 
+
+
+void register_interrupt_handler(uint8_t n,isr_t handler);//注册中断处理程序
+
 #endif

@@ -3,5 +3,5 @@
 using namespace std;
 int main()
 {
-    for(int i=0;i<32;++i) printf("ISR_NOERRCODE %d\n",i);
+    for(int i=32;i<48;++i) printf("IRQ %d,%d\n",i-32,i);
 }

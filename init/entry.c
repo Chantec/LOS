@@ -3,6 +3,7 @@
 #include "printk.h"
 #include "gdt.h"
 #include "idt.h"
+#include "timer.h"
 
 void puts(char *str)
 {
@@ -19,27 +20,26 @@ void put_logo()
     puts(" |______|_|\\__,_|_| |_|\\__, |  \\____/|_____/ ");
     puts("                        __/ |                ");
     puts("                       |___/                 ");
+
 }
 
 int kern_entry()
 {
     init_gdt();
     init_idt();
-    
+
     console_clear(); 
     put_logo();
+
+    //init over
+
+
+   
+    // asm volatile ("int $0x3");//这个似乎是不可屏蔽中断
+
+    asm volatile ("sti");
+    init_timer(200);//200hz qemu不能准确模仿时钟
+
     
-
-
-
-    
-
-    printk("Welcome to my os!Here we are testing INT\n");
-
-    asm volatile ("int $0x3");
-    asm volatile ("int $0x4");
-
-    
-
     return 0;
 }
