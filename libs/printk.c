@@ -63,6 +63,7 @@ static char *number(char *str, int num, int base,int sign,int size)//添加了in
     if(num==0)
     {
         tmp[i++]='0';
+        size--;
     }
     else 
     {
