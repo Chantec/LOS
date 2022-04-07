@@ -31,48 +31,49 @@ void printk(const char *format, ...)
 
     console_puts(buff);
 }
-static char *number(char *str, int num, int base)
-{
-    int size=8;//只是当16进制时用到
-    char sign, tmp[36];
+ #define do_div(n,base) ({ \
+		int __res; \
+		__asm__("divl %4":"=a" (n),"=d" (__res):"0" (n),"1" (0),"r" (base)); \
+		__res; })
+
+
+static char *number(char *str, int num, int base,int sign,int size)//添加了int sign int size  size==-1 表示不用补齐
+{   int bool_size=(size==-1)?0:1;
+    char  tmp[36];
     const char *digits = "0123456789ABCDEF";
     int i; // tmp的指针
 
-    if (num < 0)
+    if (sign && num < 0)
     {
-        sign = '-';
         num = -num;
-    }
-    else
-    {
-        sign = 0;
+        *str++ ='-';
     }
 
     i = 0;
 
-    do
-    {
-        tmp[i++] = digits[(num % base)];
-        num /= base;
-        size--;
-    } while (num);
+    //这里有一个bug 就是 num可能会被识别成负数 虽然我们设置的变量是sign=0 我们这里的解决方法是使用Linux里的to_div
+   
+    // do
+    // {
+    //     tmp[i++] = digits[num%base];
+    //     num/=base;
+    //     size--;
+    // } while (num);
 
-    if (sign)
+    if(num==0)
     {
-        *str++ = sign;
+        tmp[i++]='0';
+    }
+    else 
+    {
+        while(num!=0)
+        {
+            tmp[i++]=digits[do_div(num,base)];
+            size--;
+        }
     }
 
-    if (base == 8)
-    {
-        *str++ = '0';
-    }
-    else if (base == 16)
-    {
-        *str++ = '0';
-        *str++ = 'X';
-    }
-
-    if(base==16)
+    if(bool_size)
     {
         while(size-->0) *str++='0';
     }
@@ -102,6 +103,14 @@ static void vsprintf(char *buff, const char *format, va_list args)
 
         format++;//skip %
 
+        int size=-1;
+
+        if(*format<='9' && *format>='0')//如果要求占位
+        {
+            size=*format-'0';
+            format++;
+        }
+
         switch (*format)
         {
         case 'c':
@@ -119,10 +128,11 @@ static void vsprintf(char *buff, const char *format, va_list args)
             break;
 
         case 'd':
-            str = number(str, va_arg(args, unsigned long), 10);//liangtodo why long
+            str = number(str, va_arg(args, unsigned long), 10,1,size);//liangtodo why long
             break;
         case 'x':
-            str = number(str, va_arg(args, unsigned long), 16);
+        case 'X':
+            str = number(str, va_arg(args, unsigned long), 16,0,size);
             break;
         }
     }
