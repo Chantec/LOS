@@ -1,0 +1,9 @@
+common.h
+inline void outb(uint16_t port,uint8_t value);
+声明的时候直接写的inline 编译不了 显示找不到outb
+
+idt.c 
+idt_flush(&idt_ptr) 我写成idt_enteies了
+
+有时候make的时候 修改了程序 之前的提示没了 总之很奇怪 应该是那个文件没有编译
+解决方法：clean

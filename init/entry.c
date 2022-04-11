@@ -5,6 +5,18 @@
 #include "idt.h"
 #include "timer.h"
 
+#include "paging.h"
+
+
+#include "kb.h"
+
+
+
+//liangtodo 这个用的时候得取地址 
+extern uint32_t kern_start;
+extern uint32_t kern_end;
+
+
 void puts(char *str)
 {
     console_puts_color(str,rc_black,rc_green);
@@ -25,21 +37,35 @@ void put_logo()
 
 int kern_entry()
 {
+    console_clear(); 
+    
     init_gdt();
     init_idt();
+    init_kb();
+    init_paging();
 
-    console_clear(); 
+    //打印信息
     put_logo();
+    puts("Welcome to liang OS!");
 
-    //init over
-
-
-   
+    //中断处理
+    
     // asm volatile ("int $0x3");//这个似乎是不可屏蔽中断
 
     asm volatile ("sti");
-    init_timer(200);//200hz qemu不能准确模仿时钟
+    //init_timer(200);//200hz qemu不能准确模仿时钟似乎
 
+    
+
+
+    //内存管理
+
+    printk("kernel in memory start : 0x%X\n",&kern_start);
+    printk("kernel in memory end : 0x%X\n",&kern_end);
+    //尝试分页错误
+    uint32_t *ptr = (uint32_t*)0xA0000000;
+    uint32_t do_page_fault = *ptr;
+   
     
     return 0;
 }

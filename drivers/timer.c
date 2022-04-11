@@ -29,7 +29,4 @@ void init_timer(uint32_t frequency)
     //先传低位 再传高位
     outb(0x40,divisor&0xff);
     outb(0x40,(divisor>>8)&0xff);
-
-
-
 }

@@ -3,6 +3,9 @@
 
 #include "types.h"
 
+#define IRQ0 32 
+#define IRQ1 33
+
 typedef 
 struct registers
 {
@@ -14,7 +17,7 @@ struct registers
 
 typedef void (*isr_t)(registers_t);//函数指针
 
-#define IRQ0 32 
+
 
 
 void register_interrupt_handler(uint8_t n,isr_t handler);//注册中断处理程序

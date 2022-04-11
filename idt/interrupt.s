@@ -1,3 +1,4 @@
+;定义了三个宏
 %macro ISR_NOERRCODE 1
     [GLOBAL isr%1]
     isr%1:
@@ -148,10 +149,3 @@ irq_common_stub:
     add esp,8
     sti 
     iret
-
-
-
-
-
-
-

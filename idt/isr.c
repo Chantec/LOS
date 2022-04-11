@@ -9,6 +9,12 @@ void isr_handler(registers_t regs)
     console_puts_color("recieved interrupt: ",rc_black,rc_green);
     console_put_dec(regs.int_no,rc_black,rc_green);
     console_putc('\n');
+
+    if(interrupt_handler[regs.int_no]!=0)
+    {
+        isr_t handler=interrupt_handler[regs.int_no];
+        handler(regs);
+    }
 }
 
 void irq_handler(registers_t regs)
