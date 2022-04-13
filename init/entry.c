@@ -63,8 +63,8 @@ int kern_entry()
     printk("kernel in memory start : 0x%X\n",&kern_start);
     printk("kernel in memory end : 0x%X\n",&kern_end);
     //尝试分页错误
-    uint32_t *ptr = (uint32_t*)0xA0000000;
-    uint32_t do_page_fault = *ptr;
+    // uint32_t *ptr = (uint32_t*)0xA0000000;
+    // uint32_t do_page_fault = *ptr;
    
     
     return 0;

@@ -41,6 +41,16 @@ page_t *get_page(uint32_t addr,int make,page_directory_t *dir);
 void page_fault(registers_t regs);
 
 
+//kernel's page dir
+page_directory_t *kernel_directory;
+//current ~
+page_directory_t *current_directory;
+
+
+void alloc_frame(page_t *page,int is_kernel,int is_writeable);
+
+void free_frame(page_t *page);
+
 
 
 #endif

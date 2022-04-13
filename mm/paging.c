@@ -6,10 +6,7 @@
 //指向已用空间的end
 extern uint32_t placement_address;
 
-//kernel's page dir
-page_directory_t *kernel_directory;
-//current ~
-page_directory_t *current_directory;
+
 
 //表示位图 frames是申请的表示位图 nframe num_frame
 uint32_t *frames;
@@ -129,13 +126,16 @@ void init_paging()
 
     register_interrupt_handler(14,&page_fault);
 
-    //cr3指向page table
+    //
     switch_page_directory(kernel_directory);
 
+    //问题 这里不用一直开启把
     //cr0 分页开启
     uint32_t cr0;
     asm volatile("mov %%cr0,%0":"=r"(cr0));
+    
     cr0|=0x80000000;//enable paging
+    
     asm volatile("mov %0,%%cr0"::"r"(cr0));
 
 }
