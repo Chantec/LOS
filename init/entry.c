@@ -10,6 +10,8 @@
 
 #include "kb.h"
 
+#include "kheap.h"
+
 
 
 //liangtodo 这个用的时候得取地址 
@@ -42,6 +44,7 @@ int kern_entry()
     init_gdt();
     init_idt();
     init_kb();
+    //init_heap();
     init_paging();
 
     //打印信息
@@ -65,6 +68,30 @@ int kern_entry()
     //尝试分页错误
     // uint32_t *ptr = (uint32_t*)0xA0000000;
     // uint32_t do_page_fault = *ptr;
+
+
+    //heap
+
+    init_heap();
+
+    
+    void *a=kmalloc(10);
+    printk("a 0x%8x\n",a);
+    void *b=kmalloc(20);
+    printk("b 0x%8x\n",b);
+    void *c=kmalloc(30);
+    printk("c 0x%8x\n",c);
+
+    kfree(a);
+    kfree(b);
+    void *d=kmalloc(30);
+    printk("d 0x%8x\n",d);
+     void *e=kmalloc(30);
+    printk("e 0x%8x\n",e);
+
+    
+    
+    
    
     
     return 0;

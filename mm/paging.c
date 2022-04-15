@@ -4,9 +4,8 @@
 #include "printk.h"
 
 //指向已用空间的end
+extern uint32_t kern_end;
 extern uint32_t placement_address;
-
-
 
 //表示位图 frames是申请的表示位图 nframe num_frame
 uint32_t *frames;
@@ -31,7 +30,7 @@ static void clear_frame(uint32_t frame_addr)
 //检查位图的值
 static uint32_t test_frame(uint32_t frame_addr)
 {
-    uint32_t frame=frame/0x1000;
+    uint32_t frame=frame_addr/0x1000;
     uint32_t idx=frame/32;
     uint32_t off=frame%32;
     return (frames[idx]&(0x1<<off));
@@ -61,7 +60,7 @@ void alloc_frame(page_t *page,int is_kernel,int is_writeable)
 {
     if(page->frame!=0)
     {
-        printk_color(rc_black,rc_green,"page_not zero\n");
+        printk_color(rc_black,rc_green,"page_not zero page->frame 0x %8x\n",page->frame);
         return ;
     }
     else
@@ -93,9 +92,6 @@ void free_frame(page_t *page)
         page->frame=0x0;
     }
 }
-extern uint32_t kern_end;//liangtodo
-
-
 
 void init_paging()
 {
@@ -105,31 +101,40 @@ void init_paging()
     uint32_t mem_end_page=0x1000000;
 
     nframe=mem_end_page/0x1000;//有这么几个页
-    frames=(uint32_t *)kmalloc(nframe/32);//分配空间用来放位图
+    frames=(uint32_t *)kmalloc1(nframe/32);//分配空间用来放位图
 
     memset(frames,0,sizeof (frames));//
 
     //开始制作 page directory
 
-    kernel_directory=(page_directory_t *)kmalloc_a(sizeof(page_directory_t));
+    kernel_directory=(page_directory_t *)kmalloc_a1(sizeof(page_directory_t));
     memset(kernel_directory,0,sizeof (page_directory_t));
     current_directory=kernel_directory;
+
+    //分配一下heap使用的页表
+    for(uint32_t i =KHEAP_START;i<KHEAP_START+KHEAP_INITIAL_SIZE;i+=0x1000)
+        get_page(i,1,kernel_directory);
 
     //把内核使用到的地址 做一个 相等映射
     uint32_t i=0;
     
-    while(i<placement_address)
+    while(i<placement_address)//liangtodo
     {
         alloc_frame(get_page(i,1,kernel_directory),0,0);
         i+=0x1000;
     }
+    
+    //bug liangtodo meiyou fenpei  frame so that ...
+
+    for(uint32_t i =KHEAP_START;i<KHEAP_START+KHEAP_INITIAL_SIZE;i+=0x1000)
+        alloc_frame(get_page(i,1,kernel_directory),1,1);
+
 
     register_interrupt_handler(14,&page_fault);
 
     //
     switch_page_directory(kernel_directory);
 
-    //问题 这里不用一直开启把
     //cr0 分页开启
     uint32_t cr0;
     asm volatile("mov %%cr0,%0":"=r"(cr0));
@@ -137,7 +142,6 @@ void init_paging()
     cr0|=0x80000000;//enable paging
     
     asm volatile("mov %0,%%cr0"::"r"(cr0));
-
 }
 
 void switch_page_directory(page_directory_t *dir)
@@ -162,7 +166,7 @@ page_t *get_page(uint32_t address,int make,page_directory_t *dir)
     else if(make)
     {
         uint32_t tmp;
-        dir->tables[table_idx]=(page_table_t *)kmalloc_ap(sizeof(page_table_t),&tmp);//tmp physical memory
+        dir->tables[table_idx]=(page_table_t *)kmalloc_ap1(sizeof(page_table_t),&tmp);//tmp physical memory
         memset(dir->tables[table_idx],0,0x1000);
         dir->tablesPhysical[table_idx]=tmp|0x7;//111 usermode write present
         return &(dir->tables[table_idx]->pages[address%1024]);
@@ -202,7 +206,7 @@ void page_fault(registers_t regs)
     if (rw) {console_puts("read-only ");}
     if (us) {console_puts("user-mode ");}
     if (reserved) {console_puts("reserved ");}
-    console_puts(") at 0x");
+    console_puts(") at ");
     console_put_hex(faulting_addr,rc_black,rc_white);
     console_puts("\n");
     //PANIC("Page fault");
