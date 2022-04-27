@@ -1,6 +1,9 @@
 #ifndef INCLUDE_PRINTK_H_
 #define INCLUDE_PRINTK_H_
 
+#include "types.h"
+extern uint32_t read_eip();
+
 typedef __builtin_va_list va_list;
 
 #define va_start(ap, last)         (__builtin_va_start(ap, last))

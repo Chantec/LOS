@@ -12,7 +12,8 @@
 
 #include "kheap.h"
 
-
+#include "task.h"
+#include "sched.h"
 
 //liangtodo 这个用的时候得取地址 
 extern uint32_t kern_start;
@@ -36,6 +37,21 @@ void put_logo()
     puts("                       |___/                 ");
 
 }
+
+int flag=0;
+int fn()
+{
+    int cnt=0;
+    while(1)
+    {
+        if(flag==0)
+        {
+            printk_color(rc_black,rc_red,"A");
+            flag=1;
+        }
+    }
+}
+
 
 int kern_entry()
 {
@@ -63,8 +79,8 @@ int kern_entry()
 
     //内存管理
 
-    printk("kernel in memory start : 0x%X\n",&kern_start);
-    printk("kernel in memory end : 0x%X\n",&kern_end);
+    // printk("kernel in memory start : 0x%X\n",&kern_start);
+    // printk("kernel in memory end : 0x%X\n",&kern_end);
     //尝试分页错误
     // uint32_t *ptr = (uint32_t*)0xA0000000;
     // uint32_t do_page_fault = *ptr;
@@ -74,24 +90,44 @@ int kern_entry()
 
     init_heap();
 
-    
-    void *a=kmalloc(10);
-    printk("a 0x%8x\n",a);
-    void *b=kmalloc(20);
-    printk("b 0x%8x\n",b);
-    void *c=kmalloc(30);
-    printk("c 0x%8x\n",c);
+    //堆测试
 
-    kfree(a);
-    kfree(b);
-    void *d=kmalloc(30);
-    printk("d 0x%8x\n",d);
-     void *e=kmalloc(30);
-    printk("e 0x%8x\n",e);
+    // void *a=kmalloc(10);
+    // printk("a 0x%8x\n",a);
+    // void *b=kmalloc(20);
+    // printk("b 0x%8x\n",b);
+    // void *c=kmalloc(30);
+    // printk("c 0x%8x\n",c);
+
+    // kfree(a);
+    // kfree(b);
+    // void *d=kmalloc(30);
+    // printk("d 0x%8x\n",d);
+    //  void *e=kmalloc(30);
+    // printk("e 0x%8x\n",e);
+
+
+
+    //内核线程测试
+
+    asm("sti");
+    init_timer(1);
+    //asm("mov %0, %%ecx;\n\t  jmp *%%ecx "::"r"(fn));
+  
 
     
-    
-    
+    init_sched();
+
+    kernel_thread(fn);
+   
+    while(1)
+    {
+        if(flag==1)
+        {
+            console_putc_color('B',rc_black,rc_green);
+            flag=0;
+        }
+    }
    
     
     return 0;

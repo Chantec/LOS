@@ -10,11 +10,14 @@ void isr_handler(registers_t regs)
     console_put_dec(regs.int_no,rc_black,rc_green);
     console_putc('\n');
 
+
     if(interrupt_handler[regs.int_no]!=0)
     {
         isr_t handler=interrupt_handler[regs.int_no];
         handler(regs);
     }
+
+    while(1);
 }
 
 void irq_handler(registers_t regs)
@@ -30,6 +33,7 @@ void irq_handler(registers_t regs)
         isr_t handler=interrupt_handler[regs.int_no];
         handler(regs);
     }
+
 }
 
 

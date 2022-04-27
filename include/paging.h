@@ -1,6 +1,6 @@
 #ifndef INCLUDE_PAGING_H_
-#define INCLUDE_KHEAP_H_
-
+#define INCLUDE_PAGING_H_
+//bug 上面的define写成kheap了
 #include "types.h"
 #include "isr.h"
 

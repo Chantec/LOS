@@ -7,7 +7,8 @@
 //int internal 内部
 uint32_t kmalloc_int1(uint32_t sz,int align,uint32_t *phys)
 {
-    if(align)
+   
+   if(align)
     {
          //先做个对其 向下取整 再加1
          //bug002 这里直接做了向下取整并且+1024 没有考虑本来就已经对齐的情况
@@ -16,7 +17,6 @@ uint32_t kmalloc_int1(uint32_t sz,int align,uint32_t *phys)
             placement_address&=0xFFFFF000;//一个页是4k 12bit 
             placement_address+=0x1000;
          }
-        
     }
     if(phys)
     {

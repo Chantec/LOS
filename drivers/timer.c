@@ -2,15 +2,30 @@
 #include "isr.h"
 #include "console.h"
 #include "common.h"
+#include "sched.h"
+#include "printk.h"
 
 uint32_t tick=0;
 
+uint32_t curr_pic;
+
+uint32_t curr_eip;
+
 static void timer_callback(registers_t regs)
 {
-    tick++;
-    console_puts("Tick: ");
-    console_put_dec(tick,rc_black,rc_white);
-    console_putc('\n');
+    // tick++;
+    // console_puts("Tick: ");
+    // console_put_dec(tick,rc_black,rc_white);
+    // console_putc('\n');
+
+    //printk("timer: eip :%8x",read_eip());
+
+ 
+    curr_eip=regs.eip;
+    //printk("timer::eip: %8x\n",curr_eip);
+    
+    schedule();
+    
 }
 
 void init_timer(uint32_t frequency)
