@@ -4,6 +4,8 @@
 #include "types.h"
 #include "paging.h"
 
+#define STACK_SIZE 4096
+
 //进程状态
 typedef 
 enum task_state

@@ -4,14 +4,9 @@
 #include "gdt.h"
 #include "idt.h"
 #include "timer.h"
-
 #include "paging.h"
-
-
 #include "kb.h"
-
 #include "kheap.h"
-
 #include "task.h"
 #include "sched.h"
 
@@ -38,13 +33,15 @@ void put_logo()
 
 }
 
+char kern_stack[STACK_SIZE];
+
 int flag=0;
 int fn()
 {
     int cnt=0;
     while(1)
     {
-        if(flag==0)
+        //if(flag==0)
         {
             printk_color(rc_black,rc_red,"A");
             flag=1;
@@ -62,6 +59,13 @@ int kern_entry()
     init_kb();
     //init_heap();
     init_paging();
+
+    // 切换内核栈
+	uint32_t kern_stack_top = ((uint32_t)kern_stack + STACK_SIZE);
+	asm volatile ("mov %0, %%esp\n\t"
+			"xor %%ebp, %%ebp" : : "r" (kern_stack_top));
+
+
 
     //打印信息
     put_logo();
@@ -108,6 +112,8 @@ int kern_entry()
 
 
 
+
+
     //内核线程测试
 
     asm("sti");
@@ -119,7 +125,7 @@ int kern_entry()
     init_sched();
 
     kernel_thread(fn);
-   
+    //flag=1;
     while(1)
     {
         if(flag==1)

@@ -5,7 +5,7 @@
 #include "types.h"
 
 #define KHEAP_START         0xC0000000
-#define KHEAP_INITIAL_SIZE  0x10000
+#define KHEAP_INITIAL_SIZE  0x20000
 
 //分配函数 a: aligned p : physical
 //这个1是指的刚开始没有建立heap的时候 直接调用从内存后面要的空间
