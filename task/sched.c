@@ -21,16 +21,12 @@ void init_sched()
     current=(PCB_t*)kmalloc(sizeof(PCB_t));
     memset(current,0,sizeof(current));
 
-
     current->state=TASK_RUNNABLE;
     current->pid=now_pid++;
-    current->stack=kern_stack;
     current->mm=NULL;
     current->next=NULL;
 
-
     ready_procs=current;
-    //asm volatile("sti");
 }
 
 
@@ -48,7 +44,7 @@ void change_task_to(PCB_t *next)
 {
     if(next!=NULL)
     {
-        printk("cur next %d %d\n",current->pid,next->pid);
+        //printk("cur next %d %d\n",current->pid,next->pid);
         PCB_t* prev=current;
         current=next;
         
@@ -61,18 +57,10 @@ void change_task_to(PCB_t *next)
         ptr->next=prev;//把prev放到队列末尾
         prev->next=NULL;//bug 找了半天
 
+        prev->context.eip=curr_eip;
+        //printk("%8x %8x\n",prev->context.ebx,current->context.ebx);
+
         switch_to(&(prev->context),&(current->context));
-        //仅切换ip
-
-
-        //save the eip
-      
-        //prev->context.eip=curr_eip;
-
-        //restore eip
-        //asm("mov %0, %%ecx;\n\t sti;\n\t jmp *%%ecx"::"r"(current->context.eip));
-
-        //asm("mov %0,%%ecx;\n\t sti;\n\t push %%ecx\n\t ret"::"r"(current->context.eip));
     }
 }
 

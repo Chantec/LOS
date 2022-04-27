@@ -18,11 +18,11 @@ static void timer_callback(registers_t regs)
     // console_put_dec(tick,rc_black,rc_white);
     // console_putc('\n');
 
-    //printk("timer: eip :%8x",read_eip());
 
- 
+    
     curr_eip=regs.eip;
     //printk("timer::eip: %8x\n",curr_eip);
+    //printk("timer: eip :%8x",curr_eip);
     
     schedule();
     

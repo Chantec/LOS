@@ -1,19 +1,11 @@
-; -------------------------------------------------
-; 	线程切换的实现
-;
-; 	hurley 2013/11/23
-;
-; -------------------------------------------------
-
 [global switch_to]
-
-; 具体的线程切换操作，重点在于寄存器的保存与恢复
+[extern print_reg]
 switch_to:
         mov eax, [esp+4]
 
         mov [eax+0],  esp
         mov [eax+4],  ebp
-        mov [eax+8],  ebx
+        ;mov [eax+8],  ebx;eip
         mov [eax+12], esi
         mov [eax+16], edi
         pushf
@@ -28,7 +20,20 @@ switch_to:
         mov esi, [eax+12]
         mov edi, [eax+16]
         mov eax, [eax+20]
+
         push eax
         popf
- 	
+
+        ;push ebx
+        ;call print_reg
+        ;pop ebx
+        ;push ebx
+        
+
         ret
+
+
+
+
+ 	
+        
